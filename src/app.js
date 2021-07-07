@@ -1,12 +1,23 @@
-import _ from 'lodash';
+const rssUrlId = 'rssUrl';
+
+const html = `
+<div class="container">
+  <div class="row">
+    <div class="col col-lg-2"></div>
+    <div class="col">
+      <input type="text" class="form-control" id="${rssUrlId}" aria-describedby="rssUrlHelp">
+    </div>
+    <div class="col-md-auto">
+      <button type="submit" class="btn btn-primary">Добавить</button>
+    </div>
+    <div class="col col-lg-2"></div>
+  </div>
+</div>
+`;
 
 const render = () => {
   const form = document.createElement('form');
-  form.innerHTML = _.join([
-    '<input type="text" class="form-control" id="rssUrl" aria-describedby="rssUrlHelp">',
-    '<div id="rssUrlHelp" class="form-text">Пример: https://ru.hexlet.io/lessons.rss</div>',
-    '<button type="submit" class="btn btn-primary">Добавить</button>',
-  ], '\n');
+  form.innerHTML = html;
   document.body.appendChild(form);
 };
 

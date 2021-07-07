@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "private": true,
   "scripts": {
-    "test": "npx jest",
+    "test": "npx jest --passWithNoTests",
     "build": "webpack --mode=production",
     "start": "webpack serve --open --mode=development"
   },
