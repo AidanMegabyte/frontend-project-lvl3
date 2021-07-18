@@ -1,0 +1,17 @@
+{
+  "translation": {
+    "appHeader": "RSS-агрегатор",
+    "rssForm": {
+      "urlLabel": "Ссылка RSS",
+      "urlPlaceholder": "Ссылка RSS",
+      "submitButtonLabel": "Добавить"
+    },
+    "feedListHeader": "Фиды",
+    "postListHeader": "Посты",
+    "messages": {
+      "rssUrlInvalid": "Ссылка должна быть валидным URL.",
+      "rssLoadedOk": "RSS успешно загружен.",
+      "rssLoadedOError": "Неизвестная ошибка. Что-то пошло не так."
+    }
+  }
+}

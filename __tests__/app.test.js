@@ -4,6 +4,7 @@ import {
 import { promises as fsp } from 'fs';
 import { waitFor } from '@testing-library/dom';
 import testingLibraryUserEvent from '@testing-library/user-event';
+import i18next from 'i18next';
 import { getFixturePath, getDomElementById } from './common.js';
 import startApp from '../src/app.js';
 import {
@@ -15,11 +16,10 @@ import {
   feedListContainerId,
 } from '../src/render.js';
 import api from '../src/api.js';
-import messages from '../src/messages.js';
 
 const userEvent = testingLibraryUserEvent.default;
 
-beforeEach(() => startApp());
+beforeEach(() => waitFor(() => startApp()));
 
 test('Starting application', () => {
   expect(getDomElementById(formId)).toBeDefined();
@@ -50,7 +50,7 @@ test('RSS URL validation', () => {
     expect(getDomElementById(rssUrlInputId)).toHaveClass('is-invalid');
     expect(getDomElementById(postListContainerId).innerHTML.trim()).toEqual('');
     expect(getDomElementById(feedListContainerId).innerHTML.trim()).toEqual('');
-    expect(getDomElementById(feedbackTextId)).toHaveTextContent(messages.RSS_URL_INVALID);
+    expect(getDomElementById(feedbackTextId)).toHaveTextContent(i18next.t('messages.rssUrlInvalid'));
     expect(getDomElementById(feedbackTextId)).not.toHaveClass('text-success');
     expect(getDomElementById(feedbackTextId)).toHaveClass('text-danger');
   });
@@ -82,7 +82,7 @@ test('Downloading RSS - success', () => Promise.all([
     expect(getDomElementById(postListContainerId)).toHaveTextContent(rss.posts[0].title);
     expect(getDomElementById(postListContainerId)).toHaveTextContent(rss.posts[0].description);
     expect(getDomElementById(postListContainerId).querySelector('a')).toHaveAttribute('href', rss.posts[0].link);
-    expect(getDomElementById(feedbackTextId)).toHaveTextContent(messages.RSS_LOADED_OK);
+    expect(getDomElementById(feedbackTextId)).toHaveTextContent(i18next.t('messages.rssLoadedOk'));
     expect(getDomElementById(rssUrlInputId)).not.toHaveClass('is-invalid');
     expect(getDomElementById(feedbackTextId)).toHaveClass('text-success');
     expect(getDomElementById(feedbackTextId)).not.toHaveClass('text-danger');
@@ -105,7 +105,7 @@ test('Downloading RSS - error', () => {
     expect(getDomElementById(rssAddButtonId)).not.toHaveAttribute('disabled');
     expect(getDomElementById(postListContainerId).innerHTML.trim()).toEqual('');
     expect(getDomElementById(feedListContainerId).innerHTML.trim()).toEqual('');
-    expect(getDomElementById(feedbackTextId)).toHaveTextContent(messages.RSS_LOADED_ERROR);
+    expect(getDomElementById(feedbackTextId)).toHaveTextContent(i18next.t('messages.rssLoadedOError'));
     expect(getDomElementById(rssUrlInputId)).not.toHaveClass('is-invalid');
     expect(getDomElementById(feedbackTextId)).not.toHaveClass('text-success');
     expect(getDomElementById(feedbackTextId)).toHaveClass('text-danger');
