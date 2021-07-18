@@ -1,0 +1,14 @@
+{
+  "feed": {
+    "title": "Test RSS",
+    "description": "Test RSS",
+    "link": "http://example.com/"
+  },
+  "posts": [
+    {
+      "title": "Post",
+      "description": "Post",
+      "link": "http://example.com/test/1626377520"
+    }
+  ]
+}

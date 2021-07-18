@@ -1,10 +1,10 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const autoprefixer = require('autoprefixer');
+import { resolve } from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import autoprefixer from 'autoprefixer';
 
-const distPath = path.resolve(__dirname, 'dist');
+const distPath = resolve(process.cwd(), 'dist');
 
-module.exports = {
+export default {
   entry: './src/index.js',
   output: {
     filename: 'bundle.js',
