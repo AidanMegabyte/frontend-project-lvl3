@@ -71,11 +71,11 @@ const renderRssPart = (partContainerId, partHeader, partItems, partItemIdPrefix)
     ...partItems.flatMap(({
       id, title, description, link,
     }) => [
-        `<div id="#${partItemIdPrefix}-${id}">`,
-        `<a href="${link}" target="_blank"><b>${title}</b></a>`,
-        `<p class="small text-black-50">${description}</p>`,
-        '</div>',
-      ]),
+      `<div id="#${partItemIdPrefix}-${id}">`,
+      `<a href="${link}" target="_blank"><b>${title}</b></a>`,
+      `<p class="small text-black-50">${description}</p>`,
+      '</div>',
+    ]),
   ].join('\n');
 };
 
