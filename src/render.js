@@ -1,5 +1,3 @@
-import i18next from 'i18next';
-
 // ID элементов формы
 const formId = 'rssForm';
 const rssUrlInputId = 'rssUrlInput';
@@ -80,29 +78,29 @@ const renderRssPart = (partContainerId, partHeader, partItems, partItemIdPrefix)
 };
 
 // Отрисовка фидов RSS
-const renderRssFeeds = (feeds) => renderRssPart(feedListContainerId, i18next.t('feedListHeader'), feeds, 'feed');
+const renderRssFeeds = (feeds, i18) => renderRssPart(feedListContainerId, i18.t('feedListHeader'), feeds, 'feed');
 
 // Отрисовка постов RSS
-const renderRssPosts = (posts) => renderRssPart(postListContainerId, i18next.t('postListHeader'), posts, 'post');
+const renderRssPosts = (posts, i18) => renderRssPart(postListContainerId, i18.t('postListHeader'), posts, 'post');
 
 // Отрисовка страницы
-const renderPage = () => {
+const renderPage = (i18) => {
   document.body.classList.add('d-flex', 'flex-column', 'vh-100');
   document.body.innerHTML = `
   <main class="container-fluid flex-grow-1">
     <section class="row bg-dark p-5">
       <div class="col-2"></div>
       <div class="col">
-        <h1 class="display-4 pb-3 text-white">${i18next.t('appHeader')}</h1>
+        <h1 class="display-4 pb-3 text-white">${i18.t('appHeader')}</h1>
         <form id="${formId}" class="text-body">
           <div class="row">
             <div class="col">
               <div class="form-floating">
-                <input type="text" class="form-control" required autofocus id="${rssUrlInputId}" name="${rssUrlFormData}" placeholder="${i18next.t('rssForm.urlPlaceholder')}">
-                <label for="${rssUrlInputId}">${i18next.t('rssForm.urlLabel')}</label>
+                <input type="text" class="form-control" required autofocus id="${rssUrlInputId}" name="${rssUrlFormData}" placeholder="${i18.t('rssForm.urlPlaceholder')}">
+                <label for="${rssUrlInputId}">${i18.t('rssForm.urlLabel')}</label>
               </div>
             </div>
-            <button id="${rssAddButtonId}" type="submit" class="col-auto btn btn-primary btn-lg px-sm-5">${i18next.t('rssForm.submitButtonLabel')}</button>
+            <button id="${rssAddButtonId}" type="submit" class="col-auto btn btn-primary btn-lg px-sm-5">${i18.t('rssForm.submitButtonLabel')}</button>
           </div>
         </form>
         <p id="${feedbackTextId}" class="pt-2 position-absolute small"></p>

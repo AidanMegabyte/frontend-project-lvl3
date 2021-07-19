@@ -15,7 +15,7 @@ const stateOriginal = {
 };
 
 // Создание наблюдаемого состояния приложения
-const createState = () => onChange(stateOriginal, (path, value) => {
+const createState = (i18) => onChange(stateOriginal, (path, value) => {
   switch (path) {
     case 'uiState.status':
       renderUiStatusChange(value);
@@ -27,10 +27,10 @@ const createState = () => onChange(stateOriginal, (path, value) => {
       api.getRssContent(value);
       break;
     case 'feeds':
-      renderRssFeeds(value);
+      renderRssFeeds(value, i18);
       break;
     case 'posts':
-      renderRssPosts(value);
+      renderRssPosts(value, i18);
       break;
     default:
       break;

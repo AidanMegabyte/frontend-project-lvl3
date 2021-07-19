@@ -13,53 +13,88 @@ import ru from './locales/ru.json';
 const getNextId = (items) => (_.max(items.map((item) => item.id || 0)) || 0) + 1;
 
 // Обработчик успешного получения RSS
-const onGetRssSuccess = (state, data) => {
+const onGetRssSuccess = (state, data, rssUrl, i18) => {
   const rss = parseRss(data.contents);
-  rss.feed.id = getNextId(state.feeds);
-  rss.posts.forEach((post, i) => {
+  const newFeed = !_.find(state.feeds, (feed) => feed.url === rssUrl);
+  if (newFeed) {
+    rss.feed.url = rssUrl;
+    rss.feed.id = getNextId(state.feeds);
+    _.set(state, 'feeds', [rss.feed, ...state.feeds]);
+  }
+  const newPosts = _.differenceWith(rss.posts, state.posts, (newPost, oldPost) => {
+    const keys = [
+      'title',
+      'description',
+      'link',
+    ];
+    return keys.every((key) => newPost[key] === oldPost[key]);
+  });
+  newPosts.forEach((post, i) => {
     _.set(post, 'id', getNextId(state.posts) + i);
   });
-  _.set(state, 'feeds', [rss.feed, ...state.feeds]);
-  _.set(state, 'posts', [...rss.posts, ...state.posts]);
-  _.set(state.uiState, 'status', UiStatus.LOADED_OK);
-  _.set(state.uiState, 'msg', i18next.t('messages.rssLoadedOk'));
+  _.set(state, 'posts', [...newPosts, ...state.posts]);
+  if (newFeed) {
+    _.set(state.uiState, 'status', UiStatus.LOADED_OK);
+    _.set(state.uiState, 'msg', i18.t('messages.rssLoadedOk'));
+  }
 };
 
 // Обработчик ошибок добавления URL
-const onAddRssUrlError = (state, error) => {
+const onAddRssUrlError = (state, error, i18) => {
   if (error.name === 'ValidationError') {
     if (error.type === 'url') {
       _.set(state.uiState, 'status', UiStatus.INVALID);
-      _.set(state.uiState, 'msg', i18next.t('messages.rssUrlInvalid'));
+      _.set(state.uiState, 'msg', i18.t('messages.rssUrlInvalid'));
     }
   } else {
     _.set(state.uiState, 'status', UiStatus.LOADED_ERROR);
-    _.set(state.uiState, 'msg', i18next.t('messages.rssLoadedOError'));
+    _.set(state.uiState, 'msg', i18.t('messages.rssLoadedOError'));
   }
 };
 
 export default () => {
-  i18next.init({
+  // Загрузка локализации
+  const i18 = i18next.createInstance();
+  i18.init({
     lng: 'ru',
     debug: false,
     resources: {
       ru,
     },
-  }).then(() => {
-    renderPage();
-    const state = createState();
-    document.getElementById(formId).addEventListener('submit', (event) => {
-      event.preventDefault();
-      const urlValidationSchema = yup.string().required().url();
-      const rssUrl = new FormData(event.target).get(rssUrlFormData).trim();
-      urlValidationSchema.validate(rssUrl)
-        .then(() => {
-          _.set(state.uiState, 'status', UiStatus.LOADING);
-          _.set(state.uiState, 'msg', '');
-          return api.getRssContent(rssUrl);
-        })
-        .then(({ data }) => onGetRssSuccess(state, data))
-        .catch((error) => onAddRssUrlError(state, error));
-    });
   });
+  // Отрисовка страницы
+  renderPage(i18);
+  // Установка состояния приложения
+  const state = createState(i18);
+  document.getElementById(formId).addEventListener('submit', (event) => {
+    event.preventDefault();
+    const rssUrl = new FormData(event.target).get(rssUrlFormData).trim();
+    if (_.find(state.feeds, (feed) => feed.url === rssUrl)) {
+      _.set(state.uiState, 'status', UiStatus.INVALID);
+      _.set(state.uiState, 'msg', i18.t('messages.rssExists'));
+      return;
+    }
+    const urlValidationSchema = yup.string().required().url();
+    urlValidationSchema.validate(rssUrl)
+      .then(() => {
+        _.set(state.uiState, 'status', UiStatus.LOADING);
+        _.set(state.uiState, 'msg', '');
+        return api.getRssContent(rssUrl);
+      })
+      .then(({ data }) => onGetRssSuccess(state, data, rssUrl, i18))
+      .catch((error) => onAddRssUrlError(state, error, i18));
+  });
+  // Обновление постов в фидах каждые 5 секунд
+  const refreshFeeds = () => {
+    const feedPromises = state.feeds.map((feed) => api.getRssContent(feed.url));
+    if (feedPromises.length > 0) {
+      Promise.all(feedPromises)
+        .then((responses) => {
+          const dataList = responses.map((response) => response.data);
+          dataList.forEach((data, i) => onGetRssSuccess(state, data, state.feeds[i].url, i18));
+        });
+    }
+    setTimeout(refreshFeeds, 5000);
+  };
+  refreshFeeds();
 };
