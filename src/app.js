@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import i18next from 'i18next';
 import createState from './state.js';
 import {
-  formId, rssUrlFormData, UiStatus, renderPage,
+  formId, rssUrlFormData, UiStatus, renderPage, postListContainerId,
 } from './render.js';
 import api from './api.js';
 import parseRss from './rss-parser.js';
@@ -66,6 +66,7 @@ export default () => {
   renderPage(i18);
   // Установка состояния приложения
   const state = createState(i18);
+  // Обработчик отправки формы
   document.getElementById(formId).addEventListener('submit', (event) => {
     event.preventDefault();
     const rssUrl = new FormData(event.target).get(rssUrlFormData).trim();
@@ -83,6 +84,18 @@ export default () => {
       })
       .then(({ data }) => onGetRssSuccess(state, data, rssUrl, i18))
       .catch((error) => onAddRssUrlError(state, error, i18));
+  });
+  // Обработчик клика по посту
+  document.getElementById(postListContainerId).addEventListener('click', (event) => {
+    const { dataset } = event.target;
+    if (!_.has(dataset, 'postId')) {
+      return;
+    }
+    const postId = parseInt(dataset.postId, 10);
+    state.uiState.postRead.push(postId);
+    if (event.target.type === 'button') {
+      state.uiState.selectedPostId = postId;
+    }
   });
   // Обновление постов в фидах каждые 5 секунд
   const refreshFeeds = () => {

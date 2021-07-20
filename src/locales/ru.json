@@ -1,6 +1,10 @@
 {
   "translation": {
     "appHeader": "RSS-агрегатор",
+    "postPreviewDialog": {
+      "readFullButtonLabel": "Читать полностью",
+      "closeButtonLabel": "Закрыть"
+    },
     "rssForm": {
       "urlLabel": "Ссылка RSS",
       "urlPlaceholder": "Ссылка RSS",
@@ -8,6 +12,7 @@
     },
     "feedListHeader": "Фиды",
     "postListHeader": "Посты",
+    "postPreviewButtonLabel": "Просмотр",
     "messages": {
       "rssUrlInvalid": "Ссылка должна быть валидным URL.",
       "rssExists": "RSS уже существует.",

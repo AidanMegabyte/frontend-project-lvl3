@@ -9,6 +9,12 @@ const feedListContainerId = 'feedListContainer';
 // Поле для URL в данных формы
 const rssUrlFormData = 'rssUrl';
 
+// ID элементов диалога предпросмотра поста
+const postPreviewModalId = 'postPreviewModal';
+const postPreviewHeaderLabelId = 'postPreviewHeaderLabel';
+const postPreviewContentContainerId = 'postPreviewContentContainer';
+const postPreviewReadFullButtonId = 'postPreviewReadFullButton';
+
 // Состояние UI
 const UiStatus = {
   INVALID: 'INVALID',
@@ -61,32 +67,68 @@ const renderUiMsgChange = (msg) => {
   feedbackText.textContent = msg;
 };
 
-// Отрисовка части RSS
-const renderRssPart = (partContainerId, partHeader, partItems, partItemIdPrefix) => {
-  const partContainer = document.getElementById(partContainerId);
-  partContainer.innerHTML = [
-    `<h4 class="pb-4">${partHeader}</h4>`,
-    ...partItems.flatMap(({
-      id, title, description, link,
+// Отрисовка фидов RSS
+const renderRssFeeds = (feeds, i18) => {
+  const feedContainer = document.getElementById(feedListContainerId);
+  feedContainer.innerHTML = [
+    `<h4 class="pb-4">${i18.t('feedListHeader')}</h4>`,
+    ...feeds.flatMap(({
+      id, title, description,
     }) => [
-      `<div id="#${partItemIdPrefix}-${id}">`,
-      `<a href="${link}" target="_blank"><b>${title}</b></a>`,
+      `<div id="#feed-${id}">`,
+      `<h3 class="h6 m-0">${title}</h3>`,
       `<p class="small text-black-50">${description}</p>`,
       '</div>',
     ]),
   ].join('\n');
 };
 
-// Отрисовка фидов RSS
-const renderRssFeeds = (feeds, i18) => renderRssPart(feedListContainerId, i18.t('feedListHeader'), feeds, 'feed');
-
 // Отрисовка постов RSS
-const renderRssPosts = (posts, i18) => renderRssPart(postListContainerId, i18.t('postListHeader'), posts, 'post');
+const renderRssPosts = (posts, postRead, i18) => {
+  const postContainer = document.getElementById(postListContainerId);
+  postContainer.innerHTML = [
+    `<h4 class="pb-4">${i18.t('postListHeader')}</h4>`,
+    ...posts.flatMap(({
+      id, title, link,
+    }) => {
+      const className = postRead.includes(id) ? 'fw-normal' : 'fw-bold';
+      return [
+        `<div id="#post-${id}" class="row pb-4">`,
+        `<a class="${className} col" href="${link}" target="_blank" data-post-id="${id}">${title}</a>`,
+        `<button type="button" class="btn btn-outline-primary btn-sm col-auto" data-post-id="${id}" data-bs-toggle="modal" data-bs-target="#${postPreviewModalId}">${i18.t('postPreviewButtonLabel')}</button>`,
+        '</div>',
+      ];
+    }),
+  ].join('\n');
+};
+
+// Перерисовка диалога предпросмотра поста
+const renderPostPreviewDialogContent = ({ title, description, link }) => {
+  document.getElementById(postPreviewHeaderLabelId).textContent = title;
+  document.getElementById(postPreviewContentContainerId).textContent = description;
+  document.getElementById(postPreviewReadFullButtonId).setAttribute('href', link);
+};
 
 // Отрисовка страницы
 const renderPage = (i18) => {
   document.body.classList.add('d-flex', 'flex-column', 'vh-100');
   document.body.innerHTML = `
+  <div class="modal fade" id="${postPreviewModalId}" tabindex="-1" aria-labelledby="${postPreviewModalId}" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="${postPreviewHeaderLabelId}"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="${postPreviewContentContainerId}" class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <a id="${postPreviewReadFullButtonId}" class="btn btn-primary" href="#" role="button" target="_blank">${i18.t('postPreviewDialog.readFullButtonLabel')}</a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${i18.t('postPreviewDialog.closeButtonLabel')}</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <main class="container-fluid flex-grow-1">
     <section class="row bg-dark p-5">
       <div class="col-2"></div>
@@ -110,6 +152,7 @@ const renderPage = (i18) => {
     <section class="row bg-white p-5">
       <div id="${postListContainerId}" class="col-8">
       </div>
+      <div class="col-sm-1"></div>
       <div id="${feedListContainerId}" class="col">
       </div>
     </section>
@@ -130,5 +173,6 @@ export {
   renderUiMsgChange,
   renderRssFeeds,
   renderRssPosts,
+  renderPostPreviewDialogContent,
   renderPage,
 };
