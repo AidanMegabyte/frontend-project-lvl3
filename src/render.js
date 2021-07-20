@@ -1,6 +1,8 @@
 // ID элементов формы
+const headerId = 'header';
 const formId = 'rssForm';
 const rssUrlInputId = 'rssUrlInput';
+const rssUrlInputLabelId = 'rssUrlInputLabel';
 const rssAddButtonId = 'rssAddButton';
 const feedbackTextId = 'feedbackText';
 const postListContainerId = 'postListContainer';
@@ -14,6 +16,7 @@ const postPreviewModalId = 'postPreviewModal';
 const postPreviewHeaderLabelId = 'postPreviewHeaderLabel';
 const postPreviewContentContainerId = 'postPreviewContentContainer';
 const postPreviewReadFullButtonId = 'postPreviewReadFullButton';
+const postPreviewCloseButtonId = 'postPreviewCloseButton';
 
 // Состояние UI
 const UiStatus = {
@@ -111,53 +114,13 @@ const renderPostPreviewDialogContent = ({ title, description, link }) => {
 
 // Отрисовка страницы
 const renderPage = (i18) => {
-  document.body.classList.add('d-flex', 'flex-column', 'vh-100');
-  document.body.innerHTML = `
-  <div class="modal fade" id="${postPreviewModalId}" tabindex="-1" aria-labelledby="${postPreviewModalId}" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="${postPreviewHeaderLabelId}"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div id="${postPreviewContentContainerId}" class="modal-body">
-        </div>
-        <div class="modal-footer">
-          <a id="${postPreviewReadFullButtonId}" class="btn btn-primary" href="#" role="button" target="_blank">${i18.t('postPreviewDialog.readFullButtonLabel')}</a>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${i18.t('postPreviewDialog.closeButtonLabel')}</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <main class="container-fluid flex-grow-1">
-    <section class="row bg-dark p-5">
-      <div class="col-2"></div>
-      <div class="col">
-        <h1 class="display-4 pb-3 text-white">${i18.t('appHeader')}</h1>
-        <form id="${formId}" class="text-body">
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <input type="text" class="form-control" required autofocus id="${rssUrlInputId}" name="${rssUrlFormData}" placeholder="${i18.t('rssForm.urlPlaceholder')}">
-                <label for="${rssUrlInputId}">${i18.t('rssForm.urlLabel')}</label>
-              </div>
-            </div>
-            <button id="${rssAddButtonId}" type="submit" class="col-auto btn btn-primary btn-lg px-sm-5">${i18.t('rssForm.submitButtonLabel')}</button>
-          </div>
-        </form>
-        <p id="${feedbackTextId}" class="pt-2 position-absolute small"></p>
-      </div>
-      <div class="col-2"></div>
-    </section>
-    <section class="row bg-white p-5">
-      <div id="${postListContainerId}" class="col-8">
-      </div>
-      <div class="col-sm-1"></div>
-      <div id="${feedListContainerId}" class="col">
-      </div>
-    </section>
-  </main>
-  `;
+  document.getElementById(postPreviewReadFullButtonId).textContent = i18.t('postPreviewDialog.readFullButtonLabel');
+  document.getElementById(postPreviewCloseButtonId).textContent = i18.t('postPreviewDialog.closeButtonLabel');
+  document.getElementById(headerId).textContent = i18.t('appHeader');
+  document.getElementById(rssUrlInputId).setAttribute('name', rssUrlFormData);
+  document.getElementById(rssUrlInputId).setAttribute('placeholder', i18.t('rssForm.urlPlaceholder'));
+  document.getElementById(rssUrlInputLabelId).textContent = i18.t('rssForm.urlLabel');
+  document.getElementById(rssAddButtonId).textContent = i18.t('rssForm.submitButtonLabel');
 };
 
 export {

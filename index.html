@@ -1,0 +1,56 @@
+<html>
+
+<head></head>
+
+<body class="d-flex flex-column vh-100">
+  <div class="modal fade" id="postPreviewModal" tabindex="-1" aria-labelledby="postPreviewModal"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="postPreviewHeaderLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="postPreviewContentContainer" class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <a id="postPreviewReadFullButton" class="btn btn-primary" href="#" role="button"
+            target="_blank"></a>
+          <button id="postPreviewCloseButton" type="button" class="btn btn-secondary"
+            data-bs-dismiss="modal"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <main class="container-fluid flex-grow-1">
+    <section class="row bg-dark p-5">
+      <div class="col-2"></div>
+      <div class="col">
+        <h1 id="header" class="display-4 pb-3 text-white"></h1>
+        <form id="rssForm" class="text-body">
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <input type="text" class="form-control" required autofocus id="rssUrlInput">
+                <label id="rssUrlInputLabel" for="rssUrlInput"></label>
+              </div>
+            </div>
+            <button id="rssAddButton" type="submit"
+              class="col-auto btn btn-primary btn-lg px-sm-5"></button>
+          </div>
+        </form>
+        <p id="feedbackText" class="feedback pt-2 position-absolute small"></p>
+      </div>
+      <div class="col-2"></div>
+    </section>
+    <section class="row bg-white p-5">
+      <div id="postListContainer" class="col-8">
+      </div>
+      <div class="col-sm-1"></div>
+      <div id="feedListContainer" class="col">
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>
