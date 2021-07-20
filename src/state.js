@@ -21,7 +21,7 @@ const stateOriginal = {
 };
 
 // Создание наблюдаемого состояния приложения
-const createState = (i18) => onChange(stateOriginal, (path, value) => {
+const createState = (t) => onChange(stateOriginal, (path, value) => {
   switch (path) {
     case 'uiState.status':
       renderUiStatusChange(value);
@@ -30,7 +30,7 @@ const createState = (i18) => onChange(stateOriginal, (path, value) => {
       renderUiMsgChange(value);
       break;
     case 'uiState.postRead':
-      renderRssPosts(stateOriginal.posts, value, i18);
+      renderRssPosts(stateOriginal.posts, value, t);
       break;
     case 'uiState.selectedPostId':
       if (value) {
@@ -39,10 +39,10 @@ const createState = (i18) => onChange(stateOriginal, (path, value) => {
       }
       break;
     case 'feeds':
-      renderRssFeeds(value, i18);
+      renderRssFeeds(value, t);
       break;
     case 'posts':
-      renderRssPosts(value, stateOriginal.uiState.postRead, i18);
+      renderRssPosts(value, stateOriginal.uiState.postRead, t);
       break;
     default:
       break;

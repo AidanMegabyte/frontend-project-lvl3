@@ -71,10 +71,10 @@ const renderUiMsgChange = (msg) => {
 };
 
 // Отрисовка фидов RSS
-const renderRssFeeds = (feeds, i18) => {
+const renderRssFeeds = (feeds, t) => {
   const feedContainer = document.getElementById(feedListContainerId);
   feedContainer.innerHTML = [
-    `<h4 class="pb-4">${i18.t('feedListHeader')}</h4>`,
+    `<h4 class="pb-4">${t('feedListHeader')}</h4>`,
     ...feeds.flatMap(({
       id, title, description,
     }) => [
@@ -87,10 +87,10 @@ const renderRssFeeds = (feeds, i18) => {
 };
 
 // Отрисовка постов RSS
-const renderRssPosts = (posts, postRead, i18) => {
+const renderRssPosts = (posts, postRead, t) => {
   const postContainer = document.getElementById(postListContainerId);
   postContainer.innerHTML = [
-    `<h4 class="pb-4">${i18.t('postListHeader')}</h4>`,
+    `<h4 class="pb-4">${t('postListHeader')}</h4>`,
     ...posts.flatMap(({
       id, title, link,
     }) => {
@@ -98,7 +98,7 @@ const renderRssPosts = (posts, postRead, i18) => {
       return [
         `<div id="#post-${id}" class="row pb-4">`,
         `<a class="${className} col" href="${link}" target="_blank" data-post-id="${id}">${title}</a>`,
-        `<button type="button" class="btn btn-outline-primary btn-sm col-auto" data-post-id="${id}" data-bs-toggle="modal" data-bs-target="#${postPreviewModalId}">${i18.t('postPreviewButtonLabel')}</button>`,
+        `<button type="button" class="btn btn-outline-primary btn-sm col-auto" data-post-id="${id}" data-bs-toggle="modal" data-bs-target="#${postPreviewModalId}">${t('postPreviewButtonLabel')}</button>`,
         '</div>',
       ];
     }),
@@ -113,14 +113,14 @@ const renderPostPreviewDialogContent = ({ title, description, link }) => {
 };
 
 // Отрисовка страницы
-const renderPage = (i18) => {
-  document.getElementById(postPreviewReadFullButtonId).textContent = i18.t('postPreviewDialog.readFullButtonLabel');
-  document.getElementById(postPreviewCloseButtonId).textContent = i18.t('postPreviewDialog.closeButtonLabel');
-  document.getElementById(headerId).textContent = i18.t('appHeader');
+const renderPage = (t) => {
+  document.getElementById(postPreviewReadFullButtonId).textContent = t('postPreviewDialog.readFullButtonLabel');
+  document.getElementById(postPreviewCloseButtonId).textContent = t('postPreviewDialog.closeButtonLabel');
+  document.getElementById(headerId).textContent = t('appHeader');
   document.getElementById(rssUrlInputId).setAttribute('name', rssUrlFormData);
-  document.getElementById(rssUrlInputId).setAttribute('placeholder', i18.t('rssForm.urlPlaceholder'));
-  document.getElementById(rssUrlInputLabelId).textContent = i18.t('rssForm.urlLabel');
-  document.getElementById(rssAddButtonId).textContent = i18.t('rssForm.submitButtonLabel');
+  document.getElementById(rssUrlInputId).setAttribute('placeholder', t('rssForm.urlPlaceholder'));
+  document.getElementById(rssUrlInputLabelId).textContent = t('rssForm.urlLabel');
+  document.getElementById(rssAddButtonId).textContent = t('rssForm.submitButtonLabel');
 };
 
 export {

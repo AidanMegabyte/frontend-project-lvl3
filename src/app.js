@@ -13,7 +13,7 @@ import ru from './locales/ru.json';
 const getNextId = (items) => (_.max(items.map((item) => item.id || 0)) || 0) + 1;
 
 // Обработчик успешного получения RSS
-const onGetRssSuccess = (state, data, rssUrl, i18) => {
+const onGetRssSuccess = (state, data, rssUrl, t) => {
   const rss = parseRss(data.contents);
   const newFeed = !_.find(state.feeds, (feed) => feed.url === rssUrl);
   if (newFeed) {
@@ -35,88 +35,88 @@ const onGetRssSuccess = (state, data, rssUrl, i18) => {
   _.set(state, 'posts', [...newPosts, ...state.posts]);
   if (newFeed) {
     _.set(state.uiState, 'status', UiStatus.LOADED_OK);
-    _.set(state.uiState, 'msg', i18.t('messages.rssLoadedOk'));
+    _.set(state.uiState, 'msg', t('messages.rssLoadedOk'));
   }
 };
 
 // Обработчик ошибок добавления URL
-const onAddRssUrlError = (state, error, i18) => {
+const onAddRssUrlError = (state, error, t) => {
   if (error.name === 'ValidationError') {
     if (error.type === 'required') {
       _.set(state.uiState, 'status', UiStatus.INVALID);
-      _.set(state.uiState, 'msg', i18.t('messages.rssUrlRequired'));
+      _.set(state.uiState, 'msg', t('messages.rssUrlRequired'));
     } else if (error.type === 'url') {
       _.set(state.uiState, 'status', UiStatus.INVALID);
-      _.set(state.uiState, 'msg', i18.t('messages.rssUrlInvalid'));
+      _.set(state.uiState, 'msg', t('messages.rssUrlInvalid'));
     }
   } else if (error.name === 'ParserError') {
     _.set(state.uiState, 'status', UiStatus.INVALID);
-    _.set(state.uiState, 'msg', i18.t('messages.rssXmlInvalid'));
+    _.set(state.uiState, 'msg', t('messages.rssXmlInvalid'));
   } else if (error.message === 'Network Error') {
     _.set(state.uiState, 'status', UiStatus.LOADED_ERROR);
-    _.set(state.uiState, 'msg', i18.t('messages.networkError'));
+    _.set(state.uiState, 'msg', t('messages.networkError'));
   } else {
     _.set(state.uiState, 'status', UiStatus.LOADED_ERROR);
-    _.set(state.uiState, 'msg', i18.t('messages.unknownError'));
+    _.set(state.uiState, 'msg', t('messages.unknownError'));
   }
 };
 
 export default () => {
   // Загрузка локализации
-  const i18 = i18next.createInstance();
-  i18.init({
+  i18next.init({
     lng: 'ru',
     debug: false,
     resources: {
       ru,
     },
+  }).then((t) => {
+    // Отрисовка страницы
+    renderPage(t);
+    // Установка состояния приложения
+    const state = createState(t);
+    // Обработчик отправки формы
+    document.getElementById(formId).addEventListener('submit', (event) => {
+      event.preventDefault();
+      const rssUrl = new FormData(event.target).get(rssUrlFormData).trim();
+      if (_.find(state.feeds, (feed) => feed.url === rssUrl)) {
+        _.set(state.uiState, 'status', UiStatus.INVALID);
+        _.set(state.uiState, 'msg', t('messages.rssExists'));
+        return;
+      }
+      const urlValidationSchema = yup.string().required().url();
+      urlValidationSchema.validate(rssUrl)
+        .then(() => {
+          _.set(state.uiState, 'status', UiStatus.LOADING);
+          _.set(state.uiState, 'msg', '');
+          return api.getRssContent(rssUrl);
+        })
+        .then(({ data }) => onGetRssSuccess(state, data, rssUrl, t))
+        .catch((error) => onAddRssUrlError(state, error, t));
+    });
+    // Обработчик клика по посту
+    document.getElementById(postListContainerId).addEventListener('click', (event) => {
+      const { dataset } = event.target;
+      if (!_.has(dataset, 'postId')) {
+        return;
+      }
+      const postId = parseInt(dataset.postId, 10);
+      state.uiState.postRead.push(postId);
+      if (event.target.type === 'button') {
+        state.uiState.selectedPostId = postId;
+      }
+    });
+    // Обновление постов в фидах каждые 5 секунд
+    const refreshFeeds = () => {
+      const feedPromises = state.feeds.map((feed) => api.getRssContent(feed.url));
+      if (feedPromises.length > 0) {
+        Promise.all(feedPromises)
+          .then((responses) => {
+            const dataList = responses.map((response) => response.data);
+            dataList.forEach((data, i) => onGetRssSuccess(state, data, state.feeds[i].url, t));
+          });
+      }
+      setTimeout(refreshFeeds, 5000);
+    };
+    refreshFeeds();
   });
-  // Отрисовка страницы
-  renderPage(i18);
-  // Установка состояния приложения
-  const state = createState(i18);
-  // Обработчик отправки формы
-  document.getElementById(formId).addEventListener('submit', (event) => {
-    event.preventDefault();
-    const rssUrl = new FormData(event.target).get(rssUrlFormData).trim();
-    if (_.find(state.feeds, (feed) => feed.url === rssUrl)) {
-      _.set(state.uiState, 'status', UiStatus.INVALID);
-      _.set(state.uiState, 'msg', i18.t('messages.rssExists'));
-      return;
-    }
-    const urlValidationSchema = yup.string().required().url();
-    urlValidationSchema.validate(rssUrl)
-      .then(() => {
-        _.set(state.uiState, 'status', UiStatus.LOADING);
-        _.set(state.uiState, 'msg', '');
-        return api.getRssContent(rssUrl);
-      })
-      .then(({ data }) => onGetRssSuccess(state, data, rssUrl, i18))
-      .catch((error) => onAddRssUrlError(state, error, i18));
-  });
-  // Обработчик клика по посту
-  document.getElementById(postListContainerId).addEventListener('click', (event) => {
-    const { dataset } = event.target;
-    if (!_.has(dataset, 'postId')) {
-      return;
-    }
-    const postId = parseInt(dataset.postId, 10);
-    state.uiState.postRead.push(postId);
-    if (event.target.type === 'button') {
-      state.uiState.selectedPostId = postId;
-    }
-  });
-  // Обновление постов в фидах каждые 5 секунд
-  const refreshFeeds = () => {
-    const feedPromises = state.feeds.map((feed) => api.getRssContent(feed.url));
-    if (feedPromises.length > 0) {
-      Promise.all(feedPromises)
-        .then((responses) => {
-          const dataList = responses.map((response) => response.data);
-          dataList.forEach((data, i) => onGetRssSuccess(state, data, state.feeds[i].url, i18));
-        });
-    }
-    setTimeout(refreshFeeds, 5000);
-  };
-  refreshFeeds();
 };
