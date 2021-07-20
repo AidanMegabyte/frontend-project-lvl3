@@ -42,13 +42,22 @@ const onGetRssSuccess = (state, data, rssUrl, i18) => {
 // Обработчик ошибок добавления URL
 const onAddRssUrlError = (state, error, i18) => {
   if (error.name === 'ValidationError') {
-    if (error.type === 'url') {
+    if (error.type === 'required') {
+      _.set(state.uiState, 'status', UiStatus.INVALID);
+      _.set(state.uiState, 'msg', i18.t('messages.rssUrlRequired'));
+    } else if (error.type === 'url') {
       _.set(state.uiState, 'status', UiStatus.INVALID);
       _.set(state.uiState, 'msg', i18.t('messages.rssUrlInvalid'));
     }
+  } else if (error.name === 'ParserError') {
+    _.set(state.uiState, 'status', UiStatus.INVALID);
+    _.set(state.uiState, 'msg', i18.t('messages.rssXmlInvalid'));
+  } else if (error.message === 'Network Error') {
+    _.set(state.uiState, 'status', UiStatus.LOADED_ERROR);
+    _.set(state.uiState, 'msg', i18.t('messages.networkError'));
   } else {
     _.set(state.uiState, 'status', UiStatus.LOADED_ERROR);
-    _.set(state.uiState, 'msg', i18.t('messages.rssLoadedOError'));
+    _.set(state.uiState, 'msg', i18.t('messages.unknownError'));
   }
 };
 

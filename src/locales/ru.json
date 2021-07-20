@@ -14,10 +14,13 @@
     "postListHeader": "Посты",
     "postPreviewButtonLabel": "Просмотр",
     "messages": {
-      "rssUrlInvalid": "Ссылка должна быть валидным URL.",
-      "rssExists": "RSS уже существует.",
-      "rssLoadedOk": "RSS успешно загружен.",
-      "rssLoadedOError": "Неизвестная ошибка. Что-то пошло не так."
+      "rssUrlRequired": "Не должно быть пустым",
+      "rssUrlInvalid": "Ссылка должна быть валидным URL",
+      "rssExists": "RSS уже существует",
+      "rssLoadedOk": "RSS успешно загружен",
+      "rssXmlInvalid": "Ресурс не содержит валидный RSS",
+      "networkError": "Ошибка сети",
+      "unknownError": "Неизвестная ошибка. Что-то пошло не так."
     }
   }
 }
