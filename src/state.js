@@ -10,7 +10,6 @@ import {
 
 // Создание наблюдаемого состояния приложения
 const createState = (t) => {
-  console.log('New state creation');
   // Начальное состояние
   const state = {
     posts: [],
@@ -23,7 +22,6 @@ const createState = (t) => {
     },
   };
   return onChange(state, (path, value) => {
-    console.log(`Current state:\n${JSON.stringify(state)}`);
     switch (path) {
       case 'uiState.status':
         renderUiStatusChange(value);

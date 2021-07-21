@@ -66,14 +66,12 @@ const renderUiStatusChange = (uiStatus) => {
     default:
       break;
   }
-  console.log(`Current view:\n${document.body.innerHTML}`);
 };
 
 // Обработчик смены feedback-сообщения
 const renderUiMsgChange = (msg) => {
   const feedbackText = document.getElementById(feedbackTextId);
   feedbackText.textContent = msg;
-  console.log(`Current view:\n${document.body.innerHTML}`);
 };
 
 // Отрисовка фидов RSS
@@ -90,7 +88,6 @@ const renderRssFeeds = (feeds, t) => {
       '</div>',
     ]),
   ].join('\n');
-  console.log(`Current view:\n${document.body.innerHTML}`);
 };
 
 // Отрисовка постов RSS
@@ -110,7 +107,6 @@ const renderRssPosts = (posts, postRead, t) => {
       ];
     }),
   ].join('\n');
-  console.log(`Current view:\n${document.body.innerHTML}`);
 };
 
 // Перерисовка диалога предпросмотра поста
@@ -118,7 +114,6 @@ const renderPostPreviewDialogContent = ({ title, description, link }) => {
   document.getElementById(postPreviewHeaderLabelId).textContent = title;
   document.getElementById(postPreviewContentContainerId).textContent = description;
   document.getElementById(postPreviewReadFullButtonId).setAttribute('href', link);
-  console.log(`Current view:\n${document.body.innerHTML}`);
 };
 
 // Отрисовка страницы
@@ -131,7 +126,6 @@ const renderPage = (t) => {
   document.getElementById(rssUrlInputId).setAttribute('placeholder', t('rssForm.urlPlaceholder'));
   document.getElementById(rssUrlInputLabelId).textContent = t('rssForm.urlLabel');
   document.getElementById(rssAddButtonId).textContent = t('rssForm.submitButtonLabel');
-  console.log(`Current view:\n${document.body.innerHTML}`);
 };
 
 export {
