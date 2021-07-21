@@ -63,7 +63,8 @@ const onAddRssUrlError = (state, error, t) => {
 
 export default () => {
   // Загрузка локализации
-  i18next.init({
+  const i18n = i18next.createInstance();
+  i18n.init({
     lng: 'ru',
     debug: false,
     resources: {

@@ -14,7 +14,6 @@ export default {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'RSS-агрегатор',
-      template: './index.html',
     }),
   ],
   module: {
