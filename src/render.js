@@ -9,7 +9,7 @@ const postListContainerId = 'postListContainer';
 const feedListContainerId = 'feedListContainer';
 
 // Поле для URL в данных формы
-const rssUrlFormData = 'rssUrl';
+const rssUrlFormData = 'url';
 
 // ID элементов диалога предпросмотра поста
 const postPreviewModalId = 'postPreviewModal';
