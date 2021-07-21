@@ -54,6 +54,8 @@
     "webpack-dev-server": "^3.11.2"
   },
   "jest": {
+    "verbose": true,
+    "testURL": "http://localhost/",
     "moduleFileExtensions": [
       "js",
       "html"
