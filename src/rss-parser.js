@@ -1,17 +1,15 @@
-// Специальный класс ошибки для парсера RSS
-class ParserError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'ParserError';
-  }
-}
+const createParserError = (message) => {
+  const result = new Error(message);
+  result.name = 'ParserError';
+  return result;
+};
 
 // Парсер RSS
 export default function parseRss(xmlString) {
   const xml = new DOMParser().parseFromString(xmlString, 'application/xml');
   const error = xml.querySelector('parsererror');
   if (error) {
-    throw new ParserError(error.textContent);
+    throw createParserError(error.textContent);
   }
   const feed = {
     title: xml.querySelector('title').textContent,
