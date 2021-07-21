@@ -86,7 +86,7 @@ const onPostClick = (event, state) => {
   const postId = parseInt(dataset.postId, 10);
   state.uiState.postRead.push(postId);
   if (event.target.type === 'button') {
-    state.uiState.selectedPostId = postId;
+    _.set(state.uiState, 'selectedPostId', postId);
   }
 };
 
