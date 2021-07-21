@@ -118,6 +118,7 @@ const renderPage = (t) => {
   document.getElementById(postPreviewCloseButtonId).textContent = t('postPreviewDialog.closeButtonLabel');
   document.getElementById(headerId).textContent = t('appHeader');
   document.getElementById(rssUrlInputId).setAttribute('name', rssUrlFormData);
+  document.getElementById(rssUrlInputId).setAttribute('aria-label', rssUrlFormData);
   document.getElementById(rssUrlInputId).setAttribute('placeholder', t('rssForm.urlPlaceholder'));
   document.getElementById(rssUrlInputLabelId).textContent = t('rssForm.urlLabel');
   document.getElementById(rssAddButtonId).textContent = t('rssForm.submitButtonLabel');
