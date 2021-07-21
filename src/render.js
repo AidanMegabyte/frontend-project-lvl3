@@ -38,18 +38,21 @@ const renderUiStatusChange = (uiStatus) => {
       feedbackText.classList.remove('text-success');
       feedbackText.classList.add('text-danger');
       rssAddButton.removeAttribute('disabled');
+      rssAddButton.removeAttribute('readonly');
       break;
     case UiStatus.LOADING:
       rssUrlInput.classList.remove('is-invalid');
       feedbackText.classList.remove('text-success');
       feedbackText.classList.remove('text-danger');
       rssAddButton.setAttribute('disabled', true);
+      rssAddButton.setAttribute('readonly', true);
       break;
     case UiStatus.LOADED_OK:
       rssUrlInput.classList.remove('is-invalid');
       feedbackText.classList.add('text-success');
       feedbackText.classList.remove('text-danger');
       rssAddButton.removeAttribute('disabled');
+      rssAddButton.removeAttribute('readonly');
       form.reset();
       rssUrlInput.focus();
       break;
@@ -58,6 +61,7 @@ const renderUiStatusChange = (uiStatus) => {
       feedbackText.classList.remove('text-success');
       feedbackText.classList.add('text-danger');
       rssAddButton.removeAttribute('disabled');
+      rssAddButton.removeAttribute('readonly');
       break;
     default:
       break;
