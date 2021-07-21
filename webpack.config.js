@@ -35,6 +35,10 @@ export default {
           { loader: 'sass-loader' },
         ],
       },
+      {
+        test: /\.html$/,
+        loader: 'html-loader',
+      },
     ],
   },
   devServer: {
