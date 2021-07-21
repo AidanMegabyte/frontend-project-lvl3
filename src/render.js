@@ -80,7 +80,7 @@ const renderRssFeeds = (feeds, t) => {
     ...feeds.flatMap(({
       id, title, description,
     }) => [
-      `<div id="#feed-${id}">`,
+      `<div id="feed-${id}">`,
       `<h3 class="h6 m-0">${title}</h3>`,
       `<p class="small text-black-50">${description}</p>`,
       '</div>',
@@ -99,7 +99,7 @@ const renderRssPosts = (posts, postRead, t) => {
     }) => {
       const className = postRead.includes(id) ? 'fw-normal' : 'fw-bold';
       return [
-        `<div id="#post-${id}" class="row pb-4">`,
+        `<div id="post-${id}" class="row pb-4">`,
         `<a class="${className} col" href="${link}" target="_blank" data-post-id="${id}">${title}</a>`,
         `<button type="button" class="btn btn-outline-primary btn-sm col-auto" data-post-id="${id}" data-bs-toggle="modal" data-bs-target="#${postPreviewModalId}">${t('postPreviewButtonLabel')}</button>`,
         '</div>',
