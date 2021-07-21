@@ -22,6 +22,7 @@ const stateOriginal = {
 
 // Создание наблюдаемого состояния приложения
 const createState = (t) => onChange(stateOriginal, (path, value) => {
+  console.log(`Current state:\n${JSON.stringify(stateOriginal)}`);
   switch (path) {
     case 'uiState.status':
       renderUiStatusChange(value);

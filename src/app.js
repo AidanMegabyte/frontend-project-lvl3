@@ -20,6 +20,7 @@ export default () => {
     renderPage(t);
     // Установка состояния приложения
     const state = createState(t);
+    console.log(`Current state:\n${JSON.stringify(state)}`);
     // Установка обработчиков событий
     document.getElementById(formId).addEventListener('submit', (event) => onRssFormSubmit(event, state, t));
     document.getElementById(postListContainerId).addEventListener('click', (event) => onPostClick(event, state));

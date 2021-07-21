@@ -38,6 +38,7 @@ const onGetRssSuccess = (state, data, rssUrl, t) => {
 
 // Обработчик ошибок добавления URL
 const onAddRssUrlError = (state, error, t) => {
+  console.log(`Last error:\n${JSON.stringify(error)}`);
   if (error.name === 'ValidationError') {
     if (error.type === 'required') {
       _.set(state.uiState, 'status', UiStatus.INVALID);
@@ -62,6 +63,7 @@ const onAddRssUrlError = (state, error, t) => {
 const onRssFormSubmit = (event, state, t) => {
   event.preventDefault();
   const rssUrl = new FormData(event.target).get(rssUrlFormData).trim();
+  console.log(`Last requested RSS URL: ${rssUrl}`);
   if (_.find(state.feeds, (feed) => feed.url === rssUrl)) {
     _.set(state.uiState, 'status', UiStatus.INVALID);
     _.set(state.uiState, 'msg', t('messages.rssExists'));
@@ -92,13 +94,17 @@ const onPostClick = (event, state) => {
 
 // Обновление постов в фидах каждые 5 секунд
 const refreshFeeds = (state, t) => {
-  const feedPromises = state.feeds.map((feed) => api.getRssContent(feed.url));
+  const feedPromises = state.feeds.map((feed) => {
+    console.log(`Last updated RSS URL: ${feed.url}`);
+    return api.getRssContent(feed.url);
+  });
   if (feedPromises.length > 0) {
     Promise.all(feedPromises)
       .then((responses) => {
         const dataList = responses.map((response) => response.data);
         dataList.forEach((data, i) => onGetRssSuccess(state, data, state.feeds[i].url, t));
-      });
+      })
+      .catch((error) => console.log(`Last error:\n${JSON.stringify(error)}`));
   }
   setTimeout(() => refreshFeeds(state, t), 5000);
 };
