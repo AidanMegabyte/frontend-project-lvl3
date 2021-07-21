@@ -1,10 +1,10 @@
-function ParserError(message) {
-  this.name = 'ParserError';
-  this.message = message;
-  this.stack = (new Error()).stack;
+// Специальный класс ошибки для парсера RSS
+class ParserError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ParserError';
+  }
 }
-ParserError.prototype = Object.create(Error.prototype);
-ParserError.prototype.constructor = ParserError;
 
 // Парсер RSS
 export default function parseRss(xmlString) {
