@@ -1,5 +1,3 @@
-import bodyHtml from '../index.html';
-
 // ID элементов формы
 const headerId = 'header';
 const formId = 'rssForm';
@@ -116,8 +114,6 @@ const renderPostPreviewDialogContent = ({ title, description, link }) => {
 
 // Отрисовка страницы
 const renderPage = (t) => {
-  document.body.classList.add('d-flex', 'flex-column', 'vh-100');
-  document.body.innerHTML = bodyHtml;
   document.getElementById(postPreviewReadFullButtonId).textContent = t('postPreviewDialog.readFullButtonLabel');
   document.getElementById(postPreviewCloseButtonId).textContent = t('postPreviewDialog.closeButtonLabel');
   document.getElementById(headerId).textContent = t('appHeader');
