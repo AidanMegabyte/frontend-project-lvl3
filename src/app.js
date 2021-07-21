@@ -64,13 +64,13 @@ const onAddRssUrlError = (state, error, t) => {
 export default () => {
   // Загрузка локализации
   const i18n = i18next.createInstance();
-  i18n.init({
+  return i18n.init({
     lng: 'ru',
     debug: false,
     resources: {
       ru,
     },
-  }).then((t) => {
+  }, (err, t) => {
     // Отрисовка страницы
     renderPage(t);
     // Установка состояния приложения
