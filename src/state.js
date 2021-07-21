@@ -8,23 +8,22 @@ import {
   renderPostPreviewDialogContent,
 } from './render.js';
 
-// Состояние приложения
-const stateOriginal = {
-  posts: [],
-  feeds: [],
-  uiState: {
-    status: '',
-    msg: '',
-    postRead: [],
-    selectedPostId: null,
-  },
-};
-
 // Создание наблюдаемого состояния приложения
 const createState = (t) => {
   console.log('New state creation');
-  return onChange(stateOriginal, (path, value) => {
-    console.log(`Current state:\n${JSON.stringify(stateOriginal)}`);
+  // Начальное состояние
+  const state = {
+    posts: [],
+    feeds: [],
+    uiState: {
+      status: '',
+      msg: '',
+      postRead: [],
+      selectedPostId: null,
+    },
+  };
+  return onChange(state, (path, value) => {
+    console.log(`Current state:\n${JSON.stringify(state)}`);
     switch (path) {
       case 'uiState.status':
         renderUiStatusChange(value);
@@ -33,11 +32,11 @@ const createState = (t) => {
         renderUiMsgChange(value);
         break;
       case 'uiState.postRead':
-        renderRssPosts(stateOriginal.posts, value, t);
+        renderRssPosts(state.posts, value, t);
         break;
       case 'uiState.selectedPostId':
         if (value) {
-          const selectedPost = _.find(stateOriginal.posts, (post) => post.id === value);
+          const selectedPost = _.find(state.posts, (post) => post.id === value);
           renderPostPreviewDialogContent(selectedPost);
         }
         break;
@@ -45,7 +44,7 @@ const createState = (t) => {
         renderRssFeeds(value, t);
         break;
       case 'posts':
-        renderRssPosts(value, stateOriginal.uiState.postRead, t);
+        renderRssPosts(value, state.uiState.postRead, t);
         break;
       default:
         break;
